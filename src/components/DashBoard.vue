@@ -78,23 +78,22 @@ export default {
     font-family: "Josefin Sans", sans-serif;
     border: none;
     background: rgb(62, 155, 119);
-    border:2px solid white;
+    border: 2px solid white;
+    height: 8vh;
   }
   .dashboard-content {
     box-shadow: none;
-    
   }
 
   .dashboard-content p strong {
     font-size: 1.3rem;
     text-transform: capitalize;
-
   }
 
   .score {
     background: rgb(62, 155, 119);
     font-size: 1.5rem;
-    border:2px solid white;
+    border: 2px solid white;
     color: white;
     padding: 5px;
     border-radius: 0;
