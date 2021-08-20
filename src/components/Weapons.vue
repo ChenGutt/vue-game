@@ -22,7 +22,6 @@ export default {
 
     //choosing a weapon
     const weaponPickHandler = (weapon) => {
-      // weaponClass.value = "weapon active";
       userWeapon.value = weapon;
       emit("onUserPick", weapon);
     };

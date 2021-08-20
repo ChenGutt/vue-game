@@ -15,23 +15,17 @@
     />
     <Header v-if="!isGameStarted" />
   </div>
-
+  <p class="game-explained" v-if="!userPick ">
+    the first one to reach 3 points is the winner
+  </p>
   <div v-if="!isGameStarted">
     <div class="weapons-title">
       <h4>{{ title }}</h4>
     </div>
     <div>
-      <div v-if="!picked.length" class="weapons">
+      <div class="weapons">
         <Weapons
-          v-for="weapon in weapons"
-          :weapon="weapon"
-          :key="weapon"
-          @onUserPick="setUserPick"
-        />
-      </div>
-      <div v-if="picked.length" class="weapons">
-        <Weapons
-          v-for="weapon in picked"
+          v-for="weapon in availableWeapons"
           :weapon="weapon"
           :key="weapon"
           @onUserPick="setUserPick"
@@ -69,7 +63,7 @@
 </template>
 
 <script>
-import { ref } from "@vue/reactivity";
+import { computed, ref } from "@vue/reactivity";
 import { launchConfetti } from "../utilities/confetti";
 import Weapons from "./Weapons.vue";
 import Button from "../reusables/Button.vue";
@@ -99,21 +93,27 @@ export default {
     const weapons = ref(["paper", "rock", "scissors"]);
     const userScore = ref(null);
     const computerScore = ref(null);
-    const picked = ref([]);
     const userPick = ref(null);
     const userName = ref("");
-    const isBattleOn = ref(false);
+    const isBattleOn = ref(false); //when actual battle starts
     const isGameStarted = ref(false);
     const title = ref("choose your weapon");
-    const showInputField = ref(true);
+    const showInputField = ref(true); //tells the modal not to display an input field in the modal
     const showMessage = ref(false); //modal upon winning or losing
-    const message = ref("");
+    const message = ref(""); // displays in modal to tell user whether he won or lost the game
+
+    const availableWeapons = computed(() => {
+      return weapons.value.filter((item) =>
+        userPick.value != null ? item === userPick.value : item
+      );
+    });
 
     //generate a random number between 0-2 to match one of the array elements and assigned as computer's weapon
     const computerWeapon = ref(
       weapons.value[Math.floor(Math.random() * weapons.value.length)]
     );
 
+    //returns a random number that is assigned to computerWeapons
     const returnRandom = () => {
       return (computerWeapon.value =
         weapons.value[Math.floor(Math.random() * weapons.value.length)]);
@@ -128,7 +128,6 @@ export default {
     //set user's weapon
     const setUserPick = (weapon) => {
       userPick.value = weapon;
-      picked.value = weapons.value.filter((item) => item === weapon);
       title.value = `your weapon is ${weapon}`;
     };
 
@@ -141,6 +140,7 @@ export default {
     const setScore = (uScore, cScore) => {
       userScore.value += uScore;
       computerScore.value += cScore;
+      //upon user winning 3 times
       if (userScore.value === 3) {
         setTimeout(() => {
           showMessage.value = true;
@@ -148,6 +148,7 @@ export default {
         }, 700);
         launchConfetti();
       }
+      //upon computer winning 3 times
       if (computerScore.value === 3) {
         setTimeout(() => {
           showMessage.value = true;
@@ -161,7 +162,6 @@ export default {
       isGameStarted.value = false;
       isBattleOn.value = false;
       userPick.value = null;
-      picked.value = [];
       title.value = "choose your weapon";
     };
 
@@ -171,6 +171,7 @@ export default {
       userName.value = name;
     };
 
+    //resetting values after user confirmed a new game
     const confirmNewGame = () => {
       showMessage.value = false;
       computerScore.value = null;
@@ -194,12 +195,12 @@ export default {
       showModal,
       userName,
       setUsername,
-      picked,
       title,
       showInputField,
       message,
       showMessage,
       confirmNewGame,
+      availableWeapons,
     };
   },
 };
@@ -219,6 +220,23 @@ export default {
 .weapons-title h4 {
   font-size: 2rem;
   font-family: "Josefin Sans", sans-serif;
+}
+
+.game-explained {
+  display: inline-block;
+  padding: 0.3rem;
+  background: rgb(10, 124, 109);
+  color: white;
+  border-radius: 5px;
+  margin-bottom: 0.8rem;
+  font-family: "Josefin Sans", sans-serif;
+  animation: flickering 0.9s linear infinite;
+}
+
+@keyframes flickering {
+  to {
+    transform: scale(1.1);
+  }
 }
 
 @media screen and (max-width: 768px) {

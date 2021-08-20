@@ -2,16 +2,12 @@
   <div class="dashboard">
     <div class="dashboard-content">
       <div>
-        <h4>
-          <strong>{{ username || "player" }}</strong>
-        </h4>
+        <h4>{{ username || "player" }}</h4>
         <h4>{{ userPick }}</h4>
         <p class="score">{{ userScore }}</p>
       </div>
       <div>
-        <h4>
-          <strong>computer</strong>
-        </h4>
+        <h4>computer</h4>
         <h4>{{ computerWeapon }}</h4>
         <p class="score">{{ computerScore }}</p>
       </div>
@@ -28,17 +24,15 @@ export default {
     "computerScore",
     "username",
   ],
-  setup(props) {
-    console.log(props);
-  },
+  setup(props) {},
 };
 </script>
 
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Keania+One&display=swap");
+
 .dashboard {
   width: 50vw;
-  /* padding: 1rem; */
   margin: 4rem auto;
 }
 
@@ -85,13 +79,8 @@ export default {
     box-shadow: none;
   }
 
-  .dashboard-content p strong {
-    font-size: 1.3rem;
-    text-transform: capitalize;
-  }
-
   .score {
-    background: rgb(62, 155, 119);
+    background: black;
     font-size: 1.5rem;
     border: 2px solid white;
     color: white;

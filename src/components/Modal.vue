@@ -5,7 +5,7 @@
       <input v-if="showInputField" type="text" v-model="username" /><br />
       <Button
         :text="!showInputField ? 'go again' : 'enter'"
-        class="start-button"
+        class="button"
         v-on="showInputField ? { click: enterName } : { click: confirm }"
       />
     </div>
@@ -26,7 +26,6 @@ export default {
 
     const enterName = () => {
       emit("onNameEnter", username.value);
-      console.log(username.value);
     };
 
     const confirm = () => {

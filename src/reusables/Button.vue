@@ -13,7 +13,7 @@ export default {
 </script>
 
 <style>
-.start-button {
+button {
   margin-top: 3rem;
   background: black;
   color: white;
@@ -27,11 +27,11 @@ export default {
   cursor: pointer;
 }
 
-.start-button:hover {
+button:hover {
   transform: scale(1.08);
 }
 
-.start-button:disabled {
+button:disabled {
   background: rgba(0, 0, 0, 0.61);
   cursor: not-allowed;
 }

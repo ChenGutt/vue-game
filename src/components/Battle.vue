@@ -17,7 +17,7 @@
     ></div>
   </div>
   <div :class="winner">{{ result }}</div>
-  <Button text="play again" class="start-button" @click="playAgain" />
+  <Button text="play again" class="button" @click="playAgain" />
 </template>
 
 <script>

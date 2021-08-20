@@ -4,7 +4,7 @@ export const launchConfetti = () => {
     const end = Date.now() + 2 * 1000
 
     // go Buckeyes!
-    const colors = ['#34495E', '#41B883']
+    const colors = ['#e30e98', '#41B883']
 
         ; (function frame() {
             confetti({
