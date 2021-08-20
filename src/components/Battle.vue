@@ -32,27 +32,33 @@ export default {
     const winner = ref("winner");
     const userScore = ref(0);
     const computerScore = ref(0);
+
+    //emits an event to parent component to update score
     const updatedScore = () => {
       emit("onUpdateScore", userScore.value, computerScore.value);
     };
 
+    //upon draw
     const draw = () => {
       result.value = "It's a draw";
       winner.value = "winner draw";
     };
 
+    //upon winning
     const win = () => {
       result.value = "you win!";
       userScore.value++;
       winner.value = "winner win";
     };
 
+    //upon losing
     const lose = () => {
       result.value = "you lose";
       computerScore.value++;
       winner.value = "winner lose";
     };
 
+    //emitting an event to start a new game
     const playAgain = () => {
       emit("onPlayAgain");
     };
@@ -83,11 +89,11 @@ export default {
         } else if (computerWeapon === "scissors") {
           lose();
         }
-        emit("gameOver");
       }
+      emit("gameOver");
+      updatedScore();
     };
     checkWinner();
-    updatedScore();
 
     return { result, checkWinner, winner, updatedScore, playAgain };
   },

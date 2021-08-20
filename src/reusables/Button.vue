@@ -23,7 +23,12 @@ export default {
   border-radius: 40px;
   font-size: 0.8rem;
   text-transform: uppercase;
+  transition: transform 0.2s ease-in-out;
   cursor: pointer;
+}
+
+.start-button:hover {
+  transform: scale(1.08);
 }
 
 .start-button:disabled {

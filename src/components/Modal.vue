@@ -1,9 +1,13 @@
 <template>
   <div class="backdrop">
     <div class="modal">
-      <label>please enter your name</label>
-      <input type="text" v-model="username" /><br />
-      <Button text="enter" class="start-button" @click="enterName" />
+      <label>{{ labelText }}</label>
+      <input v-if="showInputField" type="text" v-model="username" /><br />
+      <Button
+        :text="!showInputField ? 'go again' : 'enter'"
+        class="start-button"
+        v-on="showInputField ? { click: enterName } : { click: confirm }"
+      />
     </div>
   </div>
 </template>
@@ -12,8 +16,9 @@
 import { ref } from "@vue/reactivity";
 import Button from "../reusables/Button.vue";
 export default {
+  props: ["labelText", "showInputField"],
   components: { Button },
-  emits: ["onUserInput", "onNameEnter"],
+  emits: ["onUserInput", "onNameEnter", "onConfirm"],
   setup(props, { emit }) {
     const username = ref("");
 
@@ -24,7 +29,11 @@ export default {
       console.log(username.value);
     };
 
-    return { username, enterName };
+    const confirm = () => {
+      emit("onConfirm");
+    };
+
+    return { username, enterName, confirm };
   },
 };
 </script>

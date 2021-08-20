@@ -1,21 +1,44 @@
 <template>
   <div class="game-header">
-    <Modal v-if="showModal" @onNameEnter="setUsername" />
+    <Modal
+      v-if="showModal"
+      :showInputField="showInputField"
+      labelText="please enter your name"
+      @onNameEnter="setUsername"
+    />
+    <Modal
+      v-if="showMessage"
+      :showInputField="!showInputField"
+      :labelText="message"
+      @onNameEnter="setUsername"
+      @onConfirm="confirmNewGame"
+    />
     <Header v-if="!isGameStarted" />
   </div>
 
   <div v-if="!isGameStarted">
     <div class="weapons-title">
-      <h4>choose your weapon</h4>
+      <h4>{{ title }}</h4>
     </div>
-    <div class="weapons">
-      <Weapons
-        v-for="weapon in weapons"
-        :weapon="weapon"
-        :key="weapon"
-        @onUserPick="setUserPick"
-      />
+    <div>
+      <div v-if="!picked.length" class="weapons">
+        <Weapons
+          v-for="weapon in weapons"
+          :weapon="weapon"
+          :key="weapon"
+          @onUserPick="setUserPick"
+        />
+      </div>
+      <div v-if="picked.length" class="weapons">
+        <Weapons
+          v-for="weapon in picked"
+          :weapon="weapon"
+          :key="weapon"
+          @onUserPick="setUserPick"
+        />
+      </div>
     </div>
+
     <Button
       text="play now"
       class="start-button"
@@ -23,13 +46,14 @@
       :disabled="!userPick"
     />
   </div>
+
   <div class="counter-wrapper">
     <Countdown v-if="isGameStarted" @onBattleStart="setBattleOn" />
   </div>
   <DashBoard
     v-if="userPick != null && isBattleOn"
     :userPick="userPick"
-    :computerWeapon="computerPick"
+    :computerWeapon="computerWeapon"
     :userScore="userScore"
     :computerScore="computerScore"
     :username="userName"
@@ -37,7 +61,7 @@
   <Battle
     v-if="isBattleOn"
     :userWeapon="userPick"
-    :computerWeapon="computerPick"
+    :computerWeapon="computerWeapon"
     @onUpdateScore="setScore"
     @gameOver="isGameStarted == false && isBattleOn == false"
     @onPlayAgain="playAgain"
@@ -46,10 +70,10 @@
 
 <script>
 import { ref } from "@vue/reactivity";
+import { launchConfetti } from "../utilities/confetti";
 import Weapons from "./Weapons.vue";
 import Button from "../reusables/Button.vue";
 import DashBoard from "./DashBoard.vue";
-
 import Battle from "./Battle.vue";
 import Countdown from "./Countdown.vue";
 import Modal from "./Modal.vue";
@@ -75,16 +99,23 @@ export default {
     const weapons = ref(["paper", "rock", "scissors"]);
     const userScore = ref(null);
     const computerScore = ref(null);
+    const picked = ref([]);
     const userPick = ref(null);
     const userName = ref("");
-    const computerPick = ref(
+    const isBattleOn = ref(false);
+    const isGameStarted = ref(false);
+    const title = ref("choose your weapon");
+    const showInputField = ref(true);
+    const showMessage = ref(false); //modal upon winning or losing
+    const message = ref("");
+
+    //generate a random number between 0-2 to match one of the array elements and assigned as computer's weapon
+    const computerWeapon = ref(
       weapons.value[Math.floor(Math.random() * weapons.value.length)]
     );
-    const isGameStarted = ref(false);
-    const isBattleOn = ref(false);
 
     const returnRandom = () => {
-      return (computerPick.value =
+      return (computerWeapon.value =
         weapons.value[Math.floor(Math.random() * weapons.value.length)]);
     };
 
@@ -97,26 +128,54 @@ export default {
     //set user's weapon
     const setUserPick = (weapon) => {
       userPick.value = weapon;
-      console.log(userPick.value);
+      picked.value = weapons.value.filter((item) => item === weapon);
+      title.value = `your weapon is ${weapon}`;
     };
 
+    //starts the actual battle
     const setBattleOn = (gameOn) => {
       isBattleOn.value = gameOn;
     };
+
+    //setting the scores battle
     const setScore = (uScore, cScore) => {
-      userScore.value = uScore;
-      computerScore.value = cScore;
+      userScore.value += uScore;
+      computerScore.value += cScore;
+      if (userScore.value === 3) {
+        setTimeout(() => {
+          showMessage.value = true;
+          message.value = "you are the winner!";
+        }, 700);
+        launchConfetti();
+      }
+      if (computerScore.value === 3) {
+        setTimeout(() => {
+          showMessage.value = true;
+          message.value = "you lost the game :-(";
+        }, 700);
+      }
     };
 
+    //resetting the values when starting a new round
     const playAgain = () => {
       isGameStarted.value = false;
       isBattleOn.value = false;
       userPick.value = null;
+      picked.value = [];
+      title.value = "choose your weapon";
     };
 
+    //set name received from the modal component to username
     const setUsername = (name) => {
       showModal.value = !showModal.value;
       userName.value = name;
+    };
+
+    const confirmNewGame = () => {
+      showMessage.value = false;
+      computerScore.value = null;
+      userScore.value = null;
+      playAgain();
     };
 
     return {
@@ -127,7 +186,7 @@ export default {
       setUserPick,
       setBattleOn,
       isBattleOn,
-      computerPick,
+      computerWeapon,
       userScore,
       computerScore,
       setScore,
@@ -135,7 +194,12 @@ export default {
       showModal,
       userName,
       setUsername,
-      returnRandom,
+      picked,
+      title,
+      showInputField,
+      message,
+      showMessage,
+      confirmNewGame,
     };
   },
 };

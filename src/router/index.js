@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Game from '../views/Game.vue'
+import Game from '../components/Game.vue'
 
 const routes = [
   {

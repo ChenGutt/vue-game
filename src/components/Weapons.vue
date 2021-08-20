@@ -18,12 +18,15 @@ export default {
   props: ["weapon"],
   setup(props, { emit }) {
     const weaponClass = ref("weapon");
-    
+    const userWeapon = ref(null);
+
+    //choosing a weapon
     const weaponPickHandler = (weapon) => {
-      weaponClass.value = "weapon active";
+      // weaponClass.value = "weapon active";
+      userWeapon.value = weapon;
       emit("onUserPick", weapon);
     };
-    return { weaponPickHandler, weaponClass };
+    return { weaponPickHandler, weaponClass, userWeapon };
   },
 };
 </script>
