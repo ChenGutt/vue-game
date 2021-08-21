@@ -65,7 +65,7 @@ export default {
   padding: 1rem;
   color: black;
   background: white;
-  z-index: 100;
+  z-index: 1000;
 }
 
 .modal input {

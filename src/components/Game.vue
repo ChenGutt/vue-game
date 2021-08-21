@@ -15,7 +15,7 @@
     />
     <Header v-if="!isGameStarted" />
   </div>
-  <p class="game-explained" v-if="!userPick ">
+  <p class="game-explained" v-if="!userPick && round === 0">
     the first one to reach 3 points is the winner
   </p>
   <div v-if="!isGameStarted">
@@ -97,6 +97,7 @@ export default {
     const userName = ref("");
     const isBattleOn = ref(false); //when actual battle starts
     const isGameStarted = ref(false);
+    const round = ref(0);
     const title = ref("choose your weapon");
     const showInputField = ref(true); //tells the modal not to display an input field in the modal
     const showMessage = ref(false); //modal upon winning or losing
@@ -128,7 +129,8 @@ export default {
     //set user's weapon
     const setUserPick = (weapon) => {
       userPick.value = weapon;
-      title.value = `your weapon is ${weapon}`;
+      round.value++;
+      title.value = `round ${round.value} - your weapon is ${weapon} `;
     };
 
     //starts the actual battle
@@ -142,6 +144,7 @@ export default {
       computerScore.value += cScore;
       //upon user winning 3 times
       if (userScore.value === 3) {
+        round.value = 0;
         setTimeout(() => {
           showMessage.value = true;
           message.value = "you are the winner!";
@@ -150,6 +153,7 @@ export default {
       }
       //upon computer winning 3 times
       if (computerScore.value === 3) {
+        round.value = 0;
         setTimeout(() => {
           showMessage.value = true;
           message.value = "you lost the game :-(";
@@ -187,6 +191,7 @@ export default {
       setUserPick,
       setBattleOn,
       isBattleOn,
+      round,
       computerWeapon,
       userScore,
       computerScore,
