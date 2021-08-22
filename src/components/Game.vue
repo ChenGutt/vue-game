@@ -20,6 +20,7 @@
   </p>
   <div v-if="!isGameStarted">
     <div class="weapons-title">
+      <p v-if="userPick">round {{ round }}</p>
       <h4>{{ title }}</h4>
     </div>
     <div>
@@ -130,7 +131,7 @@ export default {
     const setUserPick = (weapon) => {
       userPick.value = weapon;
       round.value++;
-      title.value = `round ${round.value} - your weapon is ${weapon} `;
+      title.value = `your weapon is ${weapon} `;
     };
 
     //starts the actual battle
@@ -222,9 +223,23 @@ export default {
   justify-content: center;
 }
 
+.weapons-title {
+  font-family: "Josefin Sans", sans-serif;
+}
+
+.weapons-title p {
+  display: inline-block;
+  padding: 0.6rem;
+  border-radius: 5px;
+  font-size: 1rem;
+  background: rgb(64, 102, 114);
+  color: white;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
 .weapons-title h4 {
   font-size: 2rem;
-  font-family: "Josefin Sans", sans-serif;
 }
 
 .game-explained {
@@ -247,6 +262,7 @@ export default {
 @media screen and (max-width: 768px) {
   .weapons-title h4 {
     margin-bottom: 3rem;
+    font-size: 1.5rem;
   }
 }
 </style>

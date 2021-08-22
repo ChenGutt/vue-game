@@ -19,11 +19,15 @@ export default {
   setup(props, { emit }) {
     const weaponClass = ref("weapon");
     const userWeapon = ref(null);
+    const allowClick = ref(true);
 
     //choosing a weapon
     const weaponPickHandler = (weapon) => {
-      userWeapon.value = weapon;
-      emit("onUserPick", weapon);
+      if (allowClick.value) {
+        userWeapon.value = weapon;
+        emit("onUserPick", weapon);
+      }
+      allowClick.value = false;
     };
     return { weaponPickHandler, weaponClass, userWeapon };
   },
@@ -51,7 +55,7 @@ export default {
 .weapon:hover {
   color: white;
   border-radius: 50%;
-  font-size: 2rem;
+  font-size: 1.7rem;
   font-weight: bold;
   font-family: "Josefin Sans", sans-serif;
   box-shadow: inset 100rem 100rem rgba(0, 0, 0, 0.637);

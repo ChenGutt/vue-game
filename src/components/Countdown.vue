@@ -1,6 +1,6 @@
 <template>
   <div :class="counter === 1 ? 'counterIsOne' : 'counter'" v-if="!gameOn">
-    {{ counter }}
+    <span>{{ counter }}</span>
   </div>
 </template>
 
@@ -36,10 +36,16 @@ export default {
 .counterIsOne {
   border: 10px solid #2c3e50;
   border-radius: 50%;
-  font-size: 20rem;
   height: 25rem;
   width: 25rem;
   margin: 5rem auto;
+  display: grid;
+  place-items: center;
+}
+
+.counter span,
+.counterIsOne span {
+  font-size: 15rem;
 }
 
 .counterIsOne {
@@ -55,7 +61,6 @@ export default {
 @media (max-width: 768px) {
   .counter,
   .counterIsOne {
-    font-size: 17rem;
     height: 20rem;
     width: 20rem;
     margin: 10rem auto;
