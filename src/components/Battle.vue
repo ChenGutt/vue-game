@@ -136,7 +136,7 @@ export default {
 }
 
 .draw {
-  background: orange;
+  background: rgb(148, 130, 148);
 }
 
 @media screen and (max-width: 768px) {
@@ -144,6 +144,10 @@ export default {
   .user {
     width: 7rem;
     height: 7rem;
+  }
+
+  .winner {
+    width: 40%;
   }
 }
 </style>

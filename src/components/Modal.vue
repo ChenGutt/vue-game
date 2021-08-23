@@ -74,4 +74,15 @@ export default {
   margin-top: 1rem;
   outline: none;
 }
+
+@media screen and (max-width: 768px) {
+  .modal {
+    padding: 2rem;
+    width: 80vw;
+  }
+  .modal label {
+    font-size: 0.8rem;
+    line-height: 1.2rem;
+  }
+}
 </style>
