@@ -25,6 +25,7 @@ export default {
     const weaponPickHandler = (weapon) => {
       if (allowClick.value) {
         userWeapon.value = weapon;
+        
         emit("onUserPick", weapon);
       }
       allowClick.value = false;
